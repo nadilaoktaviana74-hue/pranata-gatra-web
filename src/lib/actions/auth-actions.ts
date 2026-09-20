@@ -3,22 +3,22 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 
-export async function loginAdmin(prevState: any, formData: FormData) {
+export async function loginAdmin(_prevState: unknown, formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
   if (!email || !password) {
-    return { error: 'Email dan password wajib diisi.' };
+    return { error: 'Email and password are required.' };
   }
 
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
   if (error) {
-    return { error: error.message || 'Login gagal. Periksa kembali email dan password Anda.' };
+    return { error: error.message || 'Authentication failed. Please verify your email and password.' };
   }
 
   redirect('/admin/dashboard');
@@ -35,7 +35,7 @@ export async function getAdminUser() {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     return user;
-  } catch (error) {
+  } catch {
     return null;
   }
 }

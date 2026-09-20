@@ -8,11 +8,11 @@ import {
   Bug, 
   Settings, 
   LogOut, 
-  Smartphone, 
   ExternalLink,
   ShieldCheck
 } from 'lucide-react';
 import { logoutAdmin } from '@/lib/actions/auth-actions';
+import { Logo } from '@/components/shared/logo';
 
 interface AdminSidebarProps {
   userEmail?: string | null;
@@ -30,19 +30,19 @@ export function AdminSidebar({ userEmail }: AdminSidebarProps) {
     },
     {
       href: '/admin/dashboard/releases',
-      label: 'Kelola Rilis APK',
+      label: 'Manage Releases',
       icon: Package,
       exact: false,
     },
     {
       href: '/admin/dashboard/bug-reports',
-      label: 'Laporan Kendala',
+      label: 'Bug Reports',
       icon: Bug,
       exact: false,
     },
     {
       href: '/admin/dashboard/settings',
-      label: 'Pengaturan & Akun',
+      label: 'Settings & Account',
       icon: Settings,
       exact: false,
     },
@@ -54,24 +54,11 @@ export function AdminSidebar({ userEmail }: AdminSidebarProps) {
   };
 
   return (
-    <aside className="w-64 bg-[#090d16] border-r border-slate-800 flex flex-col justify-between h-screen sticky top-0 shrink-0 z-30">
+    <aside className="w-64 bg-[#0c0c0f] border-r border-neutral-800 flex flex-col justify-between h-screen sticky top-0 shrink-0 z-30">
       <div className="space-y-6 p-4">
         {/* Brand Header */}
-        <div className="flex items-center gap-3 px-2 py-3 border-b border-slate-800/80">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500 to-teal-500 flex items-center justify-center p-0.5 shadow-md shadow-cyan-500/20">
-            <div className="w-full h-full bg-[#090d16] rounded-[10px] flex items-center justify-center">
-              <Smartphone className="w-4 h-4 text-cyan-400" />
-            </div>
-          </div>
-          <div>
-            <div className="text-sm font-bold text-white tracking-tight flex items-center gap-1.5">
-              <span>Pranata Gatra</span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-400 font-semibold">
-                Admin
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-500">Pusat Kendali Sistem</p>
-          </div>
+        <div className="px-2 py-3 border-b border-neutral-800/80">
+          <Logo size="sm" showText={true} />
         </div>
 
         {/* Navigation Menu */}
@@ -86,11 +73,11 @@ export function AdminSidebar({ userEmail }: AdminSidebarProps) {
                 href={link.href}
                 className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                   active
-                    ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                    ? 'bg-[#B38D46]/15 text-[#FFE8B3] border border-[#B38D46]/30 shadow-sm'
+                    : 'text-neutral-400 hover:text-white hover:bg-neutral-800/60'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${active ? 'text-cyan-400' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 ${active ? 'text-[#FFE8B3]' : 'text-neutral-400'}`} />
                 <span>{link.label}</span>
               </Link>
             );
@@ -99,36 +86,36 @@ export function AdminSidebar({ userEmail }: AdminSidebarProps) {
       </div>
 
       {/* Bottom User Profile & Actions */}
-      <div className="p-4 border-t border-slate-800/80 space-y-3">
+      <div className="p-4 border-t border-neutral-800/80 space-y-3">
         {/* Link back to public site */}
         <Link
           href="/"
           target="_blank"
-          className="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 text-xs transition-colors"
+          className="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800/50 text-xs transition-colors"
         >
           <span className="flex items-center gap-2">
-            <ExternalLink className="w-3.5 h-3.5" />
-            <span>Lihat Website Publik</span>
+            <ExternalLink className="w-3.5 h-3.5 text-[#B38D46]" />
+            <span>View Public Website</span>
           </span>
         </Link>
 
-        {/* Admin info badge */}
-        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800/80 space-y-1">
-          <div className="flex items-center gap-1.5 text-xs text-slate-400">
+        {/* Admin session badge */}
+        <div className="p-3 rounded-xl bg-neutral-900 border border-neutral-800/80 space-y-1">
+          <div className="flex items-center gap-1.5 text-xs text-neutral-300">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             <span className="truncate font-medium">{userEmail || 'Administrator'}</span>
           </div>
-          <span className="text-[10px] text-slate-500 block">Sesi Terotentikasi</span>
+          <span className="text-[10px] text-neutral-500 block">Authenticated Session</span>
         </div>
 
         {/* Logout button */}
         <form action={logoutAdmin}>
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 text-xs font-semibold transition-all"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 text-xs font-semibold transition-all cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" />
-            <span>Keluar (Logout)</span>
+            <span>Log Out</span>
           </button>
         </form>
       </div>

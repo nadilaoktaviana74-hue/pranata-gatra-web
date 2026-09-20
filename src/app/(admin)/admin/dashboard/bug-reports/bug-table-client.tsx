@@ -3,15 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
-  Bug, 
   Eye, 
-  Smartphone, 
-  Calendar, 
-  Paperclip, 
-  Layers,
-  Clock,
-  CheckCircle2,
-  AlertCircle
+  Paperclip
 } from 'lucide-react';
 import { BugReport, BugStatus } from '@/types/database';
 import { formatDateTime } from '@/lib/utils';
@@ -37,7 +30,7 @@ const STATUS_CONFIG: Record<BugStatus, { label: string; color: string }> = {
   INVESTIGATING: { label: 'INVESTIGATING', color: 'bg-amber-500/15 text-amber-400 border-amber-500/30' },
   IN_PROGRESS: { label: 'IN PROGRESS', color: 'bg-blue-500/15 text-blue-400 border-blue-500/30' },
   RESOLVED: { label: 'RESOLVED', color: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' },
-  CLOSED: { label: 'CLOSED', color: 'bg-slate-500/15 text-slate-400 border-slate-500/30' },
+  CLOSED: { label: 'CLOSED', color: 'bg-neutral-500/15 text-neutral-400 border-neutral-500/30' },
 };
 
 export function BugTableClient({ initialReports }: BugTableClientProps) {
@@ -51,17 +44,17 @@ export function BugTableClient({ initialReports }: BugTableClientProps) {
   });
 
   const handleQuickStatus = async (id: string, newStatus: BugStatus) => {
-    const toastId = toast.loading(`Mengubah status laporan ke ${newStatus}...`);
+    const toastId = toast.loading(`Updating report status to ${newStatus}...`);
     try {
       const res = await updateBugStatus(id, newStatus);
       if (res.success) {
-        toast.success(`Status berhasil diubah ke ${newStatus}`, { id: toastId });
+        toast.success(`Status updated to ${newStatus}`, { id: toastId });
         router.refresh();
       } else {
-        toast.error(res.error || 'Gagal mengubah status', { id: toastId });
+        toast.error(res.error || 'Failed to update status', { id: toastId });
       }
     } catch {
-      toast.error('Terjadi kesalahan jaringan.', { id: toastId });
+      toast.error('A network error occurred.', { id: toastId });
     }
   };
 
@@ -69,7 +62,7 @@ export function BugTableClient({ initialReports }: BugTableClientProps) {
     <div className="space-y-6">
       {/* Filter Status Pills */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs text-slate-400 mr-1 font-semibold">Filter Status:</span>
+        <span className="text-xs text-neutral-400 mr-1 font-semibold">Filter:</span>
         {STATUS_FILTERS.map((st) => {
           const count = st === 'ALL' 
             ? initialReports.length 
@@ -80,15 +73,15 @@ export function BugTableClient({ initialReports }: BugTableClientProps) {
               key={st}
               type="button"
               onClick={() => setSelectedFilter(st)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all flex items-center gap-1.5 cursor-pointer ${
                 selectedFilter === st
-                  ? 'bg-cyan-500 text-slate-950 border-cyan-400 shadow-md shadow-cyan-500/20'
-                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800'
+                  ? 'gold-gradient text-neutral-950 border-[#B38D46] shadow-md shadow-[#B38D46]/20'
+                  : 'bg-neutral-900 border-neutral-800 text-neutral-400 hover:text-white hover:bg-neutral-800'
               }`}
             >
               <span>{st}</span>
               <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                selectedFilter === st ? 'bg-slate-950/30 text-slate-900' : 'bg-slate-800 text-slate-400'
+                selectedFilter === st ? 'bg-neutral-950/25 text-neutral-950' : 'bg-neutral-800 text-neutral-400'
               }`}>
                 {count}
               </span>
@@ -98,50 +91,50 @@ export function BugTableClient({ initialReports }: BugTableClientProps) {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/70">
-        <table className="w-full text-left text-xs text-slate-300">
-          <thead className="bg-slate-950/80 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+      <div className="overflow-x-auto rounded-2xl border border-neutral-800 bg-neutral-900/70">
+        <table className="w-full text-left text-xs text-neutral-300">
+          <thead className="bg-neutral-950/80 text-neutral-400 font-semibold uppercase tracking-wider border-b border-neutral-800">
             <tr>
-              <th className="py-4 px-5">Pelapor</th>
-              <th className="py-4 px-5">Judul Laporan</th>
-              <th className="py-4 px-5">Perangkat & Versi</th>
-              <th className="py-4 px-5">Lampiran</th>
+              <th className="py-4 px-5">Reporter</th>
+              <th className="py-4 px-5">Issue Summary</th>
+              <th className="py-4 px-5">Device & Version</th>
+              <th className="py-4 px-5">Attachment</th>
               <th className="py-4 px-5">Status</th>
-              <th className="py-4 px-5">Tanggal Masuk</th>
-              <th className="py-4 px-5 text-right">Detail</th>
+              <th className="py-4 px-5">Received Date</th>
+              <th className="py-4 px-5 text-right">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60">
+          <tbody className="divide-y divide-neutral-800/60">
             {filteredReports.length > 0 ? (
               filteredReports.map((report) => (
-                <tr key={report.id} className="hover:bg-slate-800/40 transition-colors">
+                <tr key={report.id} className="hover:bg-neutral-800/40 transition-colors">
                   <td className="py-4 px-5 font-semibold text-white">
                     {report.name}
-                    <span className="block text-[10px] text-slate-400 font-normal">
+                    <span className="block text-[10px] text-neutral-400 font-normal">
                       {report.email}
                     </span>
                   </td>
 
                   <td className="py-4 px-5 max-w-xs">
-                    <div className="font-semibold text-slate-200 truncate">{report.title}</div>
-                    <div className="text-[10px] text-slate-400 truncate">{report.description}</div>
+                    <div className="font-semibold text-neutral-200 truncate">{report.title}</div>
+                    <div className="text-[10px] text-neutral-400 truncate">{report.description}</div>
                   </td>
 
                   <td className="py-4 px-5">
-                    <div className="text-slate-200">{report.device}</div>
-                    <div className="text-[10px] text-cyan-400 font-mono">
+                    <div className="text-neutral-200">{report.device}</div>
+                    <div className="text-[10px] text-[#FFE8B3] font-mono">
                       {report.app_version} • {report.os_version}
                     </div>
                   </td>
 
                   <td className="py-4 px-5">
                     {report.attachment_path ? (
-                      <span className="inline-flex items-center gap-1 text-[11px] text-cyan-400 font-medium">
-                        <Paperclip className="w-3.5 h-3.5" />
-                        <span>Ada</span>
+                      <span className="inline-flex items-center gap-1 text-[11px] text-[#FFE8B3] font-medium">
+                        <Paperclip className="w-3.5 h-3.5 text-[#B38D46]" />
+                        <span>Attached</span>
                       </span>
                     ) : (
-                      <span className="text-[11px] text-slate-600">-</span>
+                      <span className="text-[11px] text-neutral-600">-</span>
                     )}
                   </td>
 
@@ -151,15 +144,15 @@ export function BugTableClient({ initialReports }: BugTableClientProps) {
                       onChange={(e) => handleQuickStatus(report.id, e.target.value as BugStatus)}
                       className={`text-[10px] font-bold px-2 py-1 rounded-lg border outline-none cursor-pointer ${STATUS_CONFIG[report.status].color}`}
                     >
-                      <option value="OPEN" className="bg-slate-900 text-rose-400">OPEN</option>
-                      <option value="INVESTIGATING" className="bg-slate-900 text-amber-400">INVESTIGATING</option>
-                      <option value="IN_PROGRESS" className="bg-slate-900 text-blue-400">IN PROGRESS</option>
-                      <option value="RESOLVED" className="bg-slate-900 text-emerald-400">RESOLVED</option>
-                      <option value="CLOSED" className="bg-slate-900 text-slate-400">CLOSED</option>
+                      <option value="OPEN" className="bg-neutral-900 text-rose-400">OPEN</option>
+                      <option value="INVESTIGATING" className="bg-neutral-900 text-amber-400">INVESTIGATING</option>
+                      <option value="IN_PROGRESS" className="bg-neutral-900 text-blue-400">IN PROGRESS</option>
+                      <option value="RESOLVED" className="bg-neutral-900 text-emerald-400">RESOLVED</option>
+                      <option value="CLOSED" className="bg-neutral-900 text-neutral-400">CLOSED</option>
                     </select>
                   </td>
 
-                  <td className="py-4 px-5 text-slate-400">
+                  <td className="py-4 px-5 text-neutral-400 text-[11px]">
                     {formatDateTime(report.created_at)}
                   </td>
 
@@ -167,18 +160,18 @@ export function BugTableClient({ initialReports }: BugTableClientProps) {
                     <button
                       type="button"
                       onClick={() => setSelectedReport(report)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-400 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/40 text-xs font-semibold transition-all"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-[#B38D46]/20 text-[#FFE8B3] hover:text-white border border-neutral-700 hover:border-[#B38D46]/40 text-xs font-semibold transition-all cursor-pointer"
                     >
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>Rincian</span>
+                      <Eye className="w-3.5 h-3.5 text-[#B38D46]" />
+                      <span>Details</span>
                     </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={7} className="py-12 text-center text-slate-500">
-                  Tidak ada laporan bug dengan status {selectedFilter}.
+                <td colSpan={7} className="py-12 text-center text-neutral-500">
+                  No bug reports found with status {selectedFilter}.
                 </td>
               </tr>
             )}
@@ -189,6 +182,7 @@ export function BugTableClient({ initialReports }: BugTableClientProps) {
       {/* Detail Modal */}
       {selectedReport && (
         <BugDetailDialog
+          key={selectedReport.id}
           report={selectedReport}
           isOpen={!!selectedReport}
           onClose={() => setSelectedReport(null)}

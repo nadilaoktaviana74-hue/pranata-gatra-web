@@ -15,27 +15,29 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Pranata Gatra - Platform Pendukung Aplikasi Mobile',
+    default: 'Pranata Gatra - Workspace & Productivity Platform for Android',
     template: '%s | Pranata Gatra',
   },
   description:
-    'Platform pendukung dan portal resmi aplikasi Android Pranata Gatra. Unduh rilis APK terbaru, pantau riwayat changelog, dan sampaikan laporan kendala secara realtime.',
+    'Official website and distribution portal for the Pranata Gatra Android application. Centralize tasks, subjects, schedules, team collaboration, and verified APK releases.',
   keywords: [
     'Pranata Gatra',
-    'Aplikasi Android',
+    'Android Application',
+    'Workspace Management',
+    'Task Management',
+    'Academic Productivity',
     'Download APK',
-    'Platform Pendukung',
-    'Changelog APK',
-    'Sistem Terpadu',
+    'Schedule Planner',
+    'Team Collaboration',
   ],
-  authors: [{ name: 'Tim Pranata Gatra' }],
+  authors: [{ name: 'Pranata Gatra Team' }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   openGraph: {
-    title: 'Pranata Gatra - Platform Pendukung Aplikasi Mobile',
+    title: 'Pranata Gatra - Workspace & Productivity Platform for Android',
     description:
-      'Portal resmi aplikasi Android Pranata Gatra. Unduh rilis APK terbaru dan dapatkan pembaruan terkini.',
+      'The modern companion for academic and project productivity. Download the official Android APK and explore release changelogs.',
     type: 'website',
-    locale: 'id_ID',
+    locale: 'en_US',
   },
 };
 
@@ -45,8 +47,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className={`${geistSans.variable} ${geistMono.variable} dark`}>
-      <body className="min-h-screen bg-[#090d16] text-slate-100 antialiased flex flex-col selection:bg-cyan-500/20 selection:text-cyan-300">
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} dark`}>
+      <body className="min-h-screen bg-[#09090b] text-neutral-100 antialiased flex flex-col selection:bg-[#B38D46]/30 selection:text-[#FFE8B3]">
         {children}
         <Toaster
           position="top-right"
@@ -54,9 +56,9 @@ export default function RootLayout({
           theme="dark"
           toastOptions={{
             style: {
-              background: '#0f172a',
-              borderColor: '#1e293b',
-              color: '#f8fafc',
+              background: '#121215',
+              borderColor: '#27272a',
+              color: '#f4f4f5',
             },
           }}
         />

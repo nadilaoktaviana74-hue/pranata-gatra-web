@@ -15,24 +15,24 @@ export default async function AdminDashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col md:flex-row">
-      {/* Fixed/Sticky Sidebar */}
+    <div className="min-h-screen bg-[#09090b] text-neutral-100 flex flex-col md:flex-row selection:bg-[#B38D46]/25 selection:text-[#FFE8B3]">
+      {/* Sidebar */}
       <AdminSidebar userEmail={user.email} />
 
-      {/* Main Dashboard Area */}
+      {/* Main Dashboard Workspace Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
         {/* Top Navbar */}
-        <header className="h-16 border-b border-slate-800/80 bg-[#090d16]/90 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-20">
+        <header className="h-16 border-b border-neutral-800/80 bg-[#0c0c0f]/90 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-20">
           <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-400">Pranata Gatra</span>
-            <span className="text-slate-600">/</span>
-            <span className="text-xs font-semibold text-cyan-400">Admin Console</span>
+            <span className="text-xs text-neutral-400">Pranata Gatra</span>
+            <span className="text-neutral-600">/</span>
+            <span className="text-xs font-semibold text-[#FFE8B3]">Admin Console</span>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-xs text-slate-300 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
+            <div className="flex items-center gap-2 text-xs text-neutral-300 bg-neutral-900 px-3 py-1.5 rounded-full border border-neutral-800">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Sistem Terkoneksi</span>
+              <span>Database Connected</span>
             </div>
           </div>
         </header>

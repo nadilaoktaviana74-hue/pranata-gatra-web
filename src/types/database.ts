@@ -75,7 +75,13 @@ export interface Database {
           created_at?: string;
           published_at?: string | null;
         };
-        Relationships: [];
+        Relationships: Array<{
+          foreignKeyName: string;
+          columns: string[];
+          isOneToOne?: boolean;
+          referencedRelation: string;
+          referencedColumns: string[];
+        }>;
       };
       bug_reports: {
         Row: BugReport;
@@ -107,7 +113,13 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
-        Relationships: [];
+        Relationships: Array<{
+          foreignKeyName: string;
+          columns: string[];
+          isOneToOne?: boolean;
+          referencedRelation: string;
+          referencedColumns: string[];
+        }>;
       };
     };
     Views: Record<string, never>;
@@ -119,3 +131,8 @@ export interface Database {
     CompositeTypes: Record<string, never>;
   };
 }
+
+export type ReleaseInsert = Database['public']['Tables']['releases']['Insert'];
+export type ReleaseUpdate = Database['public']['Tables']['releases']['Update'];
+export type BugReportInsert = Database['public']['Tables']['bug_reports']['Insert'];
+export type BugReportUpdate = Database['public']['Tables']['bug_reports']['Update'];

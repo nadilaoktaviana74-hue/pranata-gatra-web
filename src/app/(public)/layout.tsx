@@ -7,9 +7,9 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col bg-[#090d16] text-slate-100 relative selection:bg-cyan-500/20 selection:text-cyan-300">
+    <div className="min-h-screen flex flex-col bg-[#09090b] text-neutral-100 relative selection:bg-[#B38D46]/30 selection:text-[#FFE8B3]">
       <Navbar />
-      <main className="flex-1 w-full flex flex-col">
+      <main className="flex-1 w-full flex flex-col pt-16 sm:pt-20">
         {children}
       </main>
       <Footer />

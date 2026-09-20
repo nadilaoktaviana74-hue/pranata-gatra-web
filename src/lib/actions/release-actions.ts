@@ -37,7 +37,6 @@ export async function getLatestRelease(): Promise<Release | null> {
       .single();
 
     if (error) {
-      // If no published release found, it's normal initially
       return null;
     }
 
@@ -77,21 +76,20 @@ export async function createRelease(formData: FormData) {
     const apkFile = formData.get('apk_file') as File | null;
 
     if (!version || !versionCodeRaw || !title || !changelog) {
-      return { success: false, error: 'Harap lengkapi semua kolom yang wajib diisi.' };
+      return { success: false, error: 'Please fill in all required fields.' };
     }
 
     const version_code = parseInt(versionCodeRaw, 10);
     if (isNaN(version_code)) {
-      return { success: false, error: 'Version code harus berupa angka integer valid.' };
+      return { success: false, error: 'Version code must be a valid integer.' };
     }
 
     if (!apkFile || apkFile.size === 0) {
-      return { success: false, error: 'File APK wajib diunggah.' };
+      return { success: false, error: 'An APK binary file is required.' };
     }
 
-    // Check extension
     if (!apkFile.name.toLowerCase().endsWith('.apk')) {
-      return { success: false, error: 'File yang diunggah harus berekstensi .apk' };
+      return { success: false, error: 'Uploaded file must have a .apk extension.' };
     }
 
     const adminClient = createAdminClient();
@@ -107,7 +105,7 @@ export async function createRelease(formData: FormData) {
 
     if (uploadError) {
       console.error('Error uploading APK to Supabase Storage:', uploadError);
-      return { success: false, error: `Gagal mengunggah file APK: ${uploadError.message}` };
+      return { success: false, error: `Failed to upload APK: ${uploadError.message}` };
     }
 
     const { data: publicUrlData } = adminClient.storage.from('apks').getPublicUrl(safeFileName);
@@ -116,26 +114,24 @@ export async function createRelease(formData: FormData) {
 
     const published_at = status === 'PUBLISHED' ? new Date().toISOString() : null;
 
-    const insertPayload = {
-      version,
-      version_code,
-      title,
-      changelog,
-      file_path,
-      file_size,
-      status,
-      published_at,
-    };
-
     const { data: insertedData, error: dbError } = await adminClient
       .from('releases')
-      .insert(insertPayload as any)
+      .insert({
+        version,
+        version_code,
+        title,
+        changelog,
+        file_path,
+        file_size,
+        status,
+        published_at,
+      })
       .select()
       .single();
 
     if (dbError) {
       console.error('Error inserting release to DB:', dbError);
-      return { success: false, error: `Gagal menyimpan metadata rilis: ${dbError.message}` };
+      return { success: false, error: `Failed to save release metadata: ${dbError.message}` };
     }
 
     revalidatePath('/');
@@ -145,9 +141,10 @@ export async function createRelease(formData: FormData) {
     revalidatePath('/admin/dashboard/releases');
 
     return { success: true, release: insertedData as unknown as Release };
-  } catch (err: any) {
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'System error while creating release.';
     console.error('Unexpected error creating release:', err);
-    return { success: false, error: err?.message || 'Terjadi kesalahan sistem saat membuat rilis.' };
+    return { success: false, error: errorMsg };
   }
 }
 
@@ -155,13 +152,13 @@ export async function updateReleaseStatus(id: string, status: ReleaseStatus) {
   try {
     const adminClient = createAdminClient();
     
-    // Check if transition to published
-    const updatePayload: any = { status };
+    const updatePayload: { status: ReleaseStatus; published_at?: string | null } = { status };
     if (status === 'PUBLISHED') {
       updatePayload.published_at = new Date().toISOString();
     }
 
-    const { error } = await (adminClient.from('releases') as any)
+    const { error } = await adminClient
+      .from('releases')
       .update(updatePayload)
       .eq('id', id);
 
@@ -176,8 +173,9 @@ export async function updateReleaseStatus(id: string, status: ReleaseStatus) {
     revalidatePath('/admin/dashboard/releases');
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err?.message || 'Gagal mengubah status rilis.' };
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Failed to update release status.';
+    return { success: false, error: errorMsg };
   }
 }
 
@@ -185,14 +183,13 @@ export async function deleteRelease(id: string) {
   try {
     const adminClient = createAdminClient();
 
-    // Fetch existing release to get file_path
     const { data } = await adminClient
       .from('releases')
       .select('file_path')
       .eq('id', id)
       .single();
 
-    const release = data as any;
+    const release = data as { file_path?: string } | null;
     if (release && release.file_path) {
       try {
         const url = new URL(release.file_path);
@@ -219,7 +216,8 @@ export async function deleteRelease(id: string) {
     revalidatePath('/admin/dashboard/releases');
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err?.message || 'Gagal menghapus rilis.' };
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Failed to delete release.';
+    return { success: false, error: errorMsg };
   }
 }
