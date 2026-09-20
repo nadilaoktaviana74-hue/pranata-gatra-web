@@ -10,7 +10,7 @@ interface HomeMobilePreviewProps {
  * `/images/home-mobile-preview-placeholder.png`.
  */
 export function HomeMobilePreview({ className = '' }: HomeMobilePreviewProps) {
-  const imageSrc = '/images/home-mobile-preview-placeholder.png';
+  const imageSrc = '/images/home-mobile-preview.png';
 
   return (
     <div className={`relative flex items-center justify-center w-full max-w-[360px] sm:max-w-[400px] ${className}`}>

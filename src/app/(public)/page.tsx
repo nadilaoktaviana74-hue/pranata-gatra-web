@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { 
-  Download, 
-  ArrowRight, 
-  CheckCircle2, 
-  Sparkles, 
-  Clock, 
+import {
+  Download,
+  ArrowRight,
+  CheckCircle2,
+  Sparkles,
+  Clock,
   HardDrive,
   Layers,
   Calendar,
@@ -22,7 +22,7 @@ export default async function HomePage() {
   const latestRelease = await getLatestRelease();
 
   return (
-    <div className="relative overflow-hidden space-y-24 sm:space-y-32 pb-24">
+    <div className="relative overflow-hidden space-y-24 sm:space-y-32 pb-24 pt-24 sm:pt-28">
       {/* Background Soft Glows */}
       <div className="gold-hero-glow top-0 left-1/2 -translate-x-1/2 -translate-y-1/3 opacity-80" />
       <div className="gold-hero-glow bottom-40 right-10 opacity-30" />
@@ -32,7 +32,7 @@ export default async function HomePage() {
          ======================================================== */}
       <section className="relative pt-12 sm:pt-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          
+
           {/* Left Hero Content */}
           <div className="lg:col-span-7 space-y-8 text-center lg:text-left">
             {/* Live Release Badge */}
@@ -109,13 +109,13 @@ export default async function HomePage() {
                 <span className="w-2 h-2 rounded-full bg-[#B38D46] animate-pulse" />
                 <span>Verified Release Channel</span>
               </div>
-              
+
               <h2 className="text-2xl sm:text-3xl font-bold text-white">
                 {latestRelease ? latestRelease.title : 'Pranata Gatra Android Application'}
               </h2>
-              
+
               <p className="text-neutral-300 text-sm leading-relaxed">
-                {latestRelease 
+                {latestRelease
                   ? latestRelease.changelog.slice(0, 180) + (latestRelease.changelog.length > 180 ? '...' : '')
                   : 'Install the official Android package to manage your workspaces, track task deadlines, and coordinate schedules with your team.'}
               </p>
@@ -316,7 +316,7 @@ export default async function HomePage() {
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="p-8 sm:p-14 rounded-3xl bg-gradient-to-br from-neutral-900 via-[#101014] to-neutral-900 border border-[#B38D46]/30 text-center space-y-6 shadow-2xl relative overflow-hidden">
           <div className="gold-hero-glow -top-32 left-1/2 -translate-x-1/2 opacity-30" />
-          
+
           <div className="relative z-10 max-w-2xl mx-auto space-y-4">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               Ready to Streamline Your Academic & Project Life?
