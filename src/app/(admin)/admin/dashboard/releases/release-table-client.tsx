@@ -129,9 +129,9 @@ export function ReleaseTableClient({ initialReleases }: ReleaseTableClientProps)
 
                   <td className="py-4 px-5 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      {release.file_path && (
+                      {(release.file_path || release.download_url) && (
                         <a
-                          href={release.file_path}
+                          href={(release.download_url || release.file_path)!}
                           download
                           title="Download APK File"
                           className="p-2 rounded-lg text-[#FFE8B3] hover:text-white bg-[#B38D46]/10 hover:bg-[#B38D46]/20 border border-[#B38D46]/20 transition-colors"

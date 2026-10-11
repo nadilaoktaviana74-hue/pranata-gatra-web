@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { Download, Menu, X } from 'lucide-react';
+import { Release } from '@/types/database';
+import { DownloadApkButton } from '@/components/releases/DownloadApkButton';
 
 interface NavLinkItem {
   href: string;
@@ -19,7 +21,11 @@ const NAV_LINKS: NavLinkItem[] = [
   { href: '/report', label: 'Report' },
 ];
 
-export function FloatingNavbar() {
+interface FloatingNavbarProps {
+  latestRelease?: Release | null;
+}
+
+export function FloatingNavbar({ latestRelease }: FloatingNavbarProps = {}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -74,13 +80,22 @@ export function FloatingNavbar() {
             3. RIGHT SEPARATE PILL: Download APK Button Island
            ==================================================== */}
         <div className="pointer-events-auto flex items-center gap-2 h-[50px] shrink-0">
-          <Link
-            href="/download"
-            className="h-full px-4 sm:px-5 rounded-full gold-gradient text-neutral-950 font-bold text-xs sm:text-xs shadow-md shadow-[#B38D46]/25 hover:shadow-lg hover:shadow-[#B38D46]/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center gap-1.5 sm:gap-2"
-          >
-            <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-neutral-950 stroke-[2.2]" />
-            <span>Download APK</span>
-          </Link>
+          {latestRelease ? (
+            <DownloadApkButton
+              release={latestRelease}
+              customLabel={`Download APK (${latestRelease.version})`}
+              size="sm"
+              className="h-full px-4 sm:px-5 rounded-full gold-gradient text-neutral-950 font-bold text-xs shadow-md shadow-[#B38D46]/25 hover:shadow-lg hover:shadow-[#B38D46]/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center gap-1.5 sm:gap-2 cursor-pointer"
+            />
+          ) : (
+            <Link
+              href="/download"
+              className="h-full px-4 sm:px-5 rounded-full gold-gradient text-neutral-950 font-bold text-xs shadow-md shadow-[#B38D46]/25 hover:shadow-lg hover:shadow-[#B38D46]/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center gap-1.5 sm:gap-2"
+            >
+              <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-neutral-950 stroke-[2.2]" />
+              <span>Download APK</span>
+            </Link>
+          )}
 
           {/* Mobile Drawer Toggle (Under md breakpoint) */}
           <button

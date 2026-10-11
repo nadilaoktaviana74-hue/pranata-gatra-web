@@ -9,6 +9,7 @@ export interface Release {
   title: string;
   changelog: string;
   file_path: string;
+  download_url?: string | null;
   file_size: number;
   status: ReleaseStatus;
   created_at: string;
@@ -58,6 +59,7 @@ export interface Database {
           title: string;
           changelog: string;
           file_path: string;
+          download_url?: string | null;
           file_size: number;
           status?: ReleaseStatus;
           created_at?: string;
@@ -70,6 +72,7 @@ export interface Database {
           title?: string;
           changelog?: string;
           file_path?: string;
+          download_url?: string | null;
           file_size?: number;
           status?: ReleaseStatus;
           created_at?: string;

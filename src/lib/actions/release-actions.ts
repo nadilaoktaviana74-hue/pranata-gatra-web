@@ -11,6 +11,7 @@ export async function getPublishedReleases(): Promise<Release[]> {
       .from('releases')
       .select('*')
       .eq('status', 'PUBLISHED')
+      .order('created_at', { ascending: false })
       .order('version_code', { ascending: false });
 
     if (error) {
@@ -32,16 +33,19 @@ export async function getLatestRelease(): Promise<Release | null> {
       .from('releases')
       .select('*')
       .eq('status', 'PUBLISHED')
+      .order('created_at', { ascending: false })
       .order('version_code', { ascending: false })
       .limit(1)
-      .single();
+      .maybeSingle();
 
     if (error) {
+      console.error('Error fetching latest release:', error);
       return null;
     }
 
-    return data as unknown as Release;
-  } catch {
+    return (data as unknown as Release) || null;
+  } catch (err) {
+    console.error('Unexpected error fetching latest release:', err);
     return null;
   }
 }
@@ -52,7 +56,8 @@ export async function getAllReleases(): Promise<Release[]> {
     const { data, error } = await supabase
       .from('releases')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .order('version_code', { ascending: false });
 
     if (error) {
       console.error('Error fetching all releases:', error);

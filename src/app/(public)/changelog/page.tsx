@@ -1,7 +1,8 @@
 import { Metadata } from 'next';
-import { History, Download, Calendar, Tag, Sparkles, HardDrive, ArrowRight } from 'lucide-react';
+import { History, Calendar, Tag, Sparkles, HardDrive, ArrowRight } from 'lucide-react';
 import { getPublishedReleases } from '@/lib/actions/release-actions';
 import { formatBytes, formatDate } from '@/lib/utils';
+import { DownloadApkButton } from '@/components/releases/DownloadApkButton';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -102,14 +103,12 @@ export default async function ChangelogPage() {
                     <span className="text-xs text-neutral-500 font-mono">
                       Format: .apk | Status: PUBLISHED
                     </span>
-                    <a
-                      href={release.file_path}
-                      download
+                    <DownloadApkButton
+                      release={release}
+                      customLabel={`Download v${release.version}`}
+                      size="sm"
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#B38D46]/15 hover:bg-[#B38D46]/25 text-[#FFE8B3] font-semibold text-xs border border-[#B38D46]/30 transition-all"
-                    >
-                      <Download className="w-3.5 h-3.5 text-[#B38D46]" />
-                      <span>Download v{release.version}</span>
-                    </a>
+                    />
                   </div>
                 </div>
               </div>
